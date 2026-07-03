@@ -4,10 +4,17 @@ LLM-driven ontology + KG construction pipeline, implemented verbatim from the pa
 
 ## Setup
 
+Dependencies for the whole HexTech project (parser + Ontogen) are managed in one
+pinned file at the repo root. From the `HexTech/` root:
+
 ```bash
-pip install -r requirements.txt
-export OPENAI_API_KEY=sk-...
+python3.10 -m venv .venv
+source .venv/bin/activate
+pip install --no-deps -r requirements.txt   # --no-deps: see requirements.txt header
 ```
+
+The LLM endpoint/model are configured in `ontogen/config.py` (and the parser's
+`.env`); no `OPENAI_API_KEY` is needed for the local server.
 
 ## One-time setup (Wikidata)
 

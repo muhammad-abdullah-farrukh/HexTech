@@ -1,3 +1,0 @@
-# Dependencies for the whole HexTech project are managed centrally.
-# From the repo root:  pip install --no-deps -r requirements.txt
-# See HexTech/requirements.txt and docs/README.md.
