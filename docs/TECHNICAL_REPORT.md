@@ -304,13 +304,45 @@ All three résumé owners are present as `:Entity` nodes.
 
 ## 10. Known limitations
 
-- **Path B (LLM) is currently reasoning-starved.** deepseek-r1 on this
-  llama-server spends its token budget on hidden reasoning, so stages with small
-  `max_tokens` (validation = 10, entity-resolution = 40) return empty answers and
-  `provenance` stays at 0 — the graph above is produced entirely by **Path A**
-  (deterministic), by design. To enable Path B facts, give those stages enough
-  tokens for reasoning + answer, or disable thinking server-side. Not required
-  for the graph.
+- **Path B (LLM) token starvation — FIXED in code (Stage 6 + EDC verified live;
+  Stage 7/8 and Stage 9/10 NOT yet verified end-to-end).**
+
+  *Root cause:* deepseek-r1 opens every completion with a `<think>…</think>`
+  block that `stages/llm.py::_strip_think` removes. The old per-call caps
+  (validation `max_tokens=10`, entity-resolution `40`, EDC define `60`, ontology
+  Turtle `300`) were consumed entirely by that reasoning, so the stages received
+  an **empty string and silently read it as a negative answer** — which is why
+  `provenance` stayed at 0 and the graph was produced entirely by **Path A**.
+  A probe (`scripts/probe_reasoning_budget.py`) measured actual reasoning length
+  at p99 ≈ 500–620 tokens for these prompts (0 samples hit the cap at 16384) —
+  the caps were ~10–50× too small, unrelated to the 24576-token server window.
+
+  *What changed (committed):*
+  - `max_tokens` on the starved calls sized for reasoning + answer
+    (`config.LLM_TOKENS_CLASSIFY / LLM_TOKENS_DEFINE = 8192`, retry at
+    `LLM_TOKENS_RETRY = 16384`), well within the 24576 window.
+  - New `stages/llm.py::call_llm_answer` treats a truncated/empty response as an
+    **INDETERMINATE** result (logged, retried once), never as a silent "no";
+    Stage 6 records a `truncated` flag per candidate in its jsonl log.
+  - EDC (Stage 3.5) and Stage 7/8 now process each **unique** property once
+    instead of once per occurrence (a 34-skill résumé previously ran 34 identical
+    `hasSkill` define/verify/Turtle cycles).
+
+  *Verification status:*
+  - ✅ **Stage 6 (Wikidata validation) and Stage 3.5 (EDC)** confirmed on a live
+    run: real `"yes 87"/"no 95"` answers with `truncated=false` (was empty
+    before), EDC producing real definitions and merges. Unit tests lock the
+    `call_llm_answer` truncation-≠-"no" contract.
+  - ⚠️ **Stage 7/8 (ontology) and Stage 9/10 (KG construction) are NOT yet
+    verified end-to-end.** The verification run was stopped before Stage 9/10
+    completed staging, so `provenance > 0`, the appearance of CQ-derived relation
+    types in `graph_relationships`, and Path A/Path B fusion in the graph tables
+    remain **UNCONFIRMED**. A full run to completion is still required to close
+    this out.
+  - Known caveat surfaced during the run: Stage 7/8 can still drop a property
+    whose LLM-generated Turtle fails validation (observed for `hasSkill`); that
+    property is then absent from the Path B ontology, though it still lands via
+    Path A.
 - **Neo4j default password** is hard-coded in `ontogen/graphdb/config.py`
   (`NEO4J_PASSWORD` default). Rotate it out / move to an env var before any
   non-local deployment.
