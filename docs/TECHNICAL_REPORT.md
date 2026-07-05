@@ -305,7 +305,8 @@ All three résumé owners are present as `:Entity` nodes.
 ## 10. Known limitations
 
 - **Path B (LLM) token starvation — FIXED in code (Stage 6 + EDC verified live;
-  Stage 7/8 and Stage 9/10 NOT yet verified end-to-end).**
+  Stage 7/8 and Stage 9/10 fixes applied but a final end-to-end rerun is still
+  required — see "2026-07 audit" below).**
 
   *Root cause:* deepseek-r1 opens every completion with a `<think>…</think>`
   block that `stages/llm.py::_strip_think` removes. The old per-call caps
@@ -333,16 +334,66 @@ All three résumé owners are present as `:Entity` nodes.
     run: real `"yes 87"/"no 95"` answers with `truncated=false` (was empty
     before), EDC producing real definitions and merges. Unit tests lock the
     `call_llm_answer` truncation-≠-"no" contract.
-  - ⚠️ **Stage 7/8 (ontology) and Stage 9/10 (KG construction) are NOT yet
-    verified end-to-end.** The verification run was stopped before Stage 9/10
-    completed staging, so `provenance > 0`, the appearance of CQ-derived relation
-    types in `graph_relationships`, and Path A/Path B fusion in the graph tables
-    remain **UNCONFIRMED**. A full run to completion is still required to close
-    this out.
-  - Known caveat surfaced during the run: Stage 7/8 can still drop a property
-    whose LLM-generated Turtle fails validation (observed for `hasSkill`); that
-    property is then absent from the Path B ontology, though it still lands via
-    Path A.
+  - ⚠️ **Stage 7/8 (ontology) and Stage 9/10 (KG construction) fixes are applied
+    in code but NOT yet verified end-to-end** (checked only with
+    `python -m py_compile`, no full pipeline run since). `provenance > 0`, the
+    appearance of CQ-derived relation types in `graph_relationships`, and
+    Path A/Path B fusion in the graph tables remain **UNCONFIRMED**. A full run
+    to completion is still required to close this out.
+
+  **2026-07 audit — Stages 7–10 (post token-starvation fix):**
+  A follow-up audit of Stages 7–10 (ontology build, KG fact generation,
+  Postgres staging, Path A/B fusion) found the original fix hadn't fully
+  reached these stages, plus one unrelated fusion gap. All four were fixed:
+
+  1. **Silent property drop when an EDC canon match has no stored Turtle**
+     (`stage7_8_ontology.py::build_ontology()`). This is the previously-known
+     caveat above (Stage 7/8 dropping `hasSkill`-style properties whose
+     Turtle failed validation) — root-caused to a canon-store match with an
+     empty `turtle` field (e.g. an entry that predates Turtle storage) being
+     silently skipped: no Wikidata block, no canon block, no generated block.
+     Every fact using that predicate was then rejected in Stage 9 as "not in
+     the ontology," indistinguishable from a genuine hallucination, while
+     Path A still produced the relation. Fixed by routing through the same
+     LLM-generation + validation path used for brand-new properties instead
+     of being dropped.
+  2. **Stage 9 fact generation had no truncation-aware retry**
+     (`stage9_10_kg.py::generate_facts()`). This call used raw `call_llm()` at
+     a fixed `max_tokens=3000`, bypassing the `call_llm_answer()`-style
+     protection built for Stage 3.5/6. If reasoning ate the whole budget, the
+     resulting empty/cut-off response was misdiagnosed as a JSON formatting
+     mistake and retried at the *same* budget — guaranteeing repeated failure
+     and silently dropping the whole QA chunk after `MAX_ATTEMPTS`. Fixed by
+     detecting truncation (`finish_reason == "length"` or empty content) and
+     retrying once at `LLM_TOKENS_FACTS_RETRY = 7000` (new in `config.py`,
+     alongside `LLM_TOKENS_FACTS = 3000`), and by no longer sending misleading
+     "fix your JSON" feedback when the real cause was budget starvation.
+     `_run_single_chunk()` also now prefers a clean (no-violation) attempt
+     over a noisier one with more raw accepted facts.
+  3. **Path A subject entities were never entity-resolved**
+     (`db/kg_staging.py::stage_structured_relations()`). Path A only resolved
+     *object* entities; non-person subjects (projects, certifications,
+     activities, references — see `render.py`) were staged under a raw,
+     unresolved slug, while Path B resolves subjects too. This could produce
+     two different `uri` values for the same real-world entity across the two
+     paths, which the Neo4j MERGE step (keyed on exact `uri`) never
+     collapses. Fixed by resolving non-person subjects the same way objects
+     already are.
+  4. Fact-generation token budget was a bare literal in `stage9_10_kg.py`;
+     moved into `config.py` as `LLM_TOKENS_FACTS` / `LLM_TOKENS_FACTS_RETRY`
+     with the same guard-assertion pattern as `LLM_TOKENS_RETRY`, so it's
+     visible next to the other budgets this bug class affects.
+
+  **⚠️ These four fixes are unverified beyond `py_compile` — a full
+  `ontogen/pipeline.py` run against a real résumé (or the fixture used in
+  `ontogen/docs/kg_pipeline_comparison.md`) is still required before this
+  item can be marked resolved**, specifically to confirm: the canon-match
+  fallthrough (#1) fires and produces valid Turtle on a document that
+  exercises an empty-turtle canon entry; the Stage 9 truncation retry (#2)
+  triggers correctly under real reasoning load without regressing normal
+  runs; Path A/B entity URIs for the same non-person entity now match (#3);
+  and there's no regression in ontology size/dedup or KG triple counts
+  versus a pre-fix baseline run.
 - **Neo4j default password** is hard-coded in `ontogen/graphdb/config.py`
   (`NEO4J_PASSWORD` default). Rotate it out / move to an env var before any
   non-local deployment.
