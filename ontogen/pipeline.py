@@ -72,27 +72,35 @@ def _run_edc_canonicalization(session_factory, match_results, cqs):
         if not unmatched:
             return match_results
 
-        print(f"[EDC]  {len(unmatched)} unmatched relation(s) → EDC canon store lookup", flush=True)
+        # Canonicalize each UNIQUE property name once and broadcast the result to
+        # every occurrence — mirrors Stage 6's dedup. Without this, a résumé with
+        # 34 skills ran 34 identical hasSkill define+verify cycles (each ~1 define
+        # + up to k verify LLM calls).
+        uniq_names = {item["extracted"]["property"].strip().lower() for item in unmatched}
+        print(f"[EDC]  {len(unmatched)} unmatched relation(s), {len(uniq_names)} unique "
+              f"property name(s) → EDC canon store lookup", flush=True)
 
+        cache: dict[str, tuple] = {}  # prop_key -> (canon_match, edc_definition)
         for item in match_results:
             if item["wikidata_match"] is not None:
                 item.setdefault("canon_match", None)
                 item.setdefault("edc_definition", "")
                 continue
 
-            result = canonicalize_relation(item["extracted"], cqs)
-            item["edc_definition"] = result.definition
-
-            if result.was_merged and result.canonical_label is not None:
-                with session_factory() as session:
-                    item["canon_match"] = canon_db.find_by_label(session, result.canonical_label)
-                print(
-                    f"[EDC]   '{item['extracted']['property']}' → merged with "
-                    f"'{result.canonical_label}' (conf={result.confidence:.2f})",
-                    flush=True,
-                )
-            else:
-                item["canon_match"] = None
+            key = item["extracted"]["property"].strip().lower()
+            if key not in cache:
+                result = canonicalize_relation(item["extracted"], cqs)
+                canon_match = None
+                if result.was_merged and result.canonical_label is not None:
+                    with session_factory() as session:
+                        canon_match = canon_db.find_by_label(session, result.canonical_label)
+                    print(
+                        f"[EDC]   '{item['extracted']['property']}' → merged with "
+                        f"'{result.canonical_label}' (conf={result.confidence:.2f})",
+                        flush=True,
+                    )
+                cache[key] = (canon_match, result.definition)
+            item["canon_match"], item["edc_definition"] = cache[key]
 
     except Exception as e:
         print(f"[EDC]  ⚠ EDC canonicalization skipped: {e}", flush=True)

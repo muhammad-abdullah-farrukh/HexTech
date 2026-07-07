@@ -6,8 +6,13 @@ Stage 6 — Embedding nearest-neighbour retrieval (top-k) + LLM yes/no validatio
 - Deduplicates extracted relations by property name before embedding — each
   unique name is validated exactly once and the result is broadcast back to
   all occurrences.
-- max_tokens=10 on the validation LLM call (was 5 — bumped slightly to fit
-  the confidence digits the model now has to append).
+- The validation LLM call goes through call_llm_answer with a reasoning-sized
+  budget (config.LLM_TOKENS_CLASSIFY, retry at LLM_TOKENS_RETRY). deepseek-r1
+  emits <think> before its "yes 87"/"no 12"; the old max_tokens=10 was consumed
+  entirely by reasoning, returned "", and was misread as a rejection — which is
+  why every candidate was rejected and Path B produced no matches. A truncated
+  answer is now logged (truncated=True) and skipped as INDETERMINATE, never
+  counted as a "no".
 - Structured mapping log written to outputs/logs/stage6_{doc_name}.jsonl —
   one line per (relation, candidate) pair, with accepted flag and scores.
 
@@ -44,13 +49,15 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from stages.llm import call_llm
+from stages.llm import call_llm_answer
 from db import wikidata
 from config import (
     EMBED_MODEL,
     TOP_K_CANDIDATES,
     OUTPUTS_DIR,
     LLM_MODEL,
+    LLM_TOKENS_CLASSIFY,
+    LLM_TOKENS_RETRY,
 )
 
 VALIDATE_PROMPT = """\
@@ -164,11 +171,39 @@ def validate_match(
         )
         t_call = time.time()
         try:
-            raw_answer = call_llm(prompt, max_tokens=10)
+            raw_answer, truncated = call_llm_answer(
+                prompt, LLM_TOKENS_CLASSIFY, retry_budget=LLM_TOKENS_RETRY
+            )
         except Exception as e:
             print(f"  [{idx}/{total}]   ✗ LLM call FAILED: {type(e).__name__}: {e}", flush=True)
             raise
         t_done = time.time()
+
+        log_entry = {
+            "timestamp":       datetime.now(timezone.utc).isoformat(),
+            "relation":        extracted["property"],
+            "description":     extracted.get("description", ""),
+            "candidate_label": candidate["label"],
+            "candidate_pid":   candidate["pid"],
+            "rank":            rank,
+            "cos_score":       round(cos_score, 4),
+            "llm_raw":         raw_answer,
+            "model":           LLM_MODEL,
+        }
+
+        # A truncated/empty answer means the model was still reasoning when it hit
+        # the token cap — it is INDETERMINATE, not a "no". Flag it, skip this
+        # candidate, and move on rather than silently rejecting (the exact bug that
+        # left Path B producing zero matches).
+        if truncated:
+            print(
+                f"  [{idx}/{total}]   ⚠ {t_done-t_call:.2f}s — INDETERMINATE "
+                f"(truncated/empty; budget too tight): {repr(raw_answer)}",
+                flush=True,
+            )
+            log_entries.append({**log_entry, "llm_confidence": 0.0,
+                                "accepted": False, "truncated": True})
+            continue
 
         said_yes, confidence = _parse_validation(raw_answer)
         accepted = said_yes and confidence >= ACCEPT_CONFIDENCE_THRESHOLD
@@ -179,19 +214,8 @@ def validate_match(
             flush=True,
         )
 
-        log_entries.append({
-            "timestamp":       datetime.now(timezone.utc).isoformat(),
-            "relation":        extracted["property"],
-            "description":     extracted.get("description", ""),
-            "candidate_label": candidate["label"],
-            "candidate_pid":   candidate["pid"],
-            "rank":            rank,
-            "cos_score":       round(cos_score, 4),
-            "llm_raw":         raw_answer,
-            "llm_confidence":  confidence,
-            "accepted":        accepted,
-            "model":           LLM_MODEL,
-        })
+        log_entries.append({**log_entry, "llm_confidence": confidence,
+                            "accepted": accepted, "truncated": False})
 
         if accepted:
             print(

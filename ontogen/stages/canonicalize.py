@@ -69,13 +69,16 @@ from typing import Optional
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from stages.llm import call_llm
+from stages.llm import call_llm_answer
 from db import canon as canon_db, gazetteers as gaz_db
 from config import (
     EMBED_MODEL,
     CANON_TOP_K,
     PROPERTY_ENTITY_TYPE_MAP,
     LLM_MODEL,
+    LLM_TOKENS_CLASSIFY,
+    LLM_TOKENS_DEFINE,
+    LLM_TOKENS_RETRY,
 )
 
 # The canon store and gazetteers now live in Postgres, so the backends need a
@@ -263,7 +266,12 @@ class EDCBackend(RelationCanonicalizationBackend):
         prompt   = _DEFINE_PROMPT.format(
             label=label, description=description, cqs=cq_block
         )
-        raw = call_llm(prompt, max_tokens=60)
+        raw, truncated = call_llm_answer(
+            prompt, LLM_TOKENS_DEFINE, retry_budget=LLM_TOKENS_RETRY
+        )
+        if truncated:
+            print(f"  [EDC] ⚠ definition truncated for '{label}' (reasoning exceeded "
+                  f"budget) — using best-effort text", flush=True)
         # Strip any "Definition:" echo the model might prepend
         definition = re.sub(r"^definition[:\s]*", "", raw.strip(), flags=re.IGNORECASE)
         return definition.strip()
@@ -282,7 +290,16 @@ class EDCBackend(RelationCanonicalizationBackend):
             label_a=label_a, definition_a=definition_a,
             label_b=label_b, definition_b=definition_b,
         )
-        raw    = call_llm(prompt, max_tokens=10).strip().lower()
+        raw_text, truncated = call_llm_answer(
+            prompt, LLM_TOKENS_CLASSIFY, retry_budget=LLM_TOKENS_RETRY
+        )
+        if truncated:
+            # Indeterminate: the model was still reasoning at the cap. Don't
+            # merge, but flag it rather than silently reading "" as "no".
+            print("  [EDC] ⚠ verify truncated (reasoning exceeded budget) — "
+                  "INDETERMINATE, no merge", flush=True)
+            return False, 0.0
+        raw    = raw_text.strip().lower()
         m      = re.match(r"^(yes|no)\s*(\d{1,3})?", raw)
         if not m:
             print(f"  [EDC] ⚠ unparseable verify response: {repr(raw)} — treating as no", flush=True)
@@ -507,7 +524,23 @@ class ResumeEntityResolver(EntityResolutionBackend):
         prompt = _ENTITY_LLM_PROMPT.format(
             mention=mention, entity_type=entity_type, context=context or "N/A"
         )
-        raw = call_llm(prompt, max_tokens=40).strip()
+        raw_text, truncated = call_llm_answer(
+            prompt, LLM_TOKENS_CLASSIFY, retry_budget=LLM_TOKENS_RETRY
+        )
+        if truncated:
+            # Reasoning ran past the cap — keep the mention verbatim rather than
+            # trusting a cut-off canonical form. Flagged, not silently accepted.
+            print(f"  [entity] ⚠ Tier-3 truncated for {mention!r} — keeping mention "
+                  f"verbatim (low confidence)", flush=True)
+            return EntityResolutionResult(
+                original_mention=mention,
+                canonical_form=mention,
+                entity_type=entity_type,
+                resolution_tier="llm",
+                confidence=0.3,
+                wikidata_qid=None,
+            )
+        raw = raw_text.strip()
 
         # Only the first line is ever trusted — anything past it is the model
         # ignoring "nothing else" and adding reasoning/explanation, which must

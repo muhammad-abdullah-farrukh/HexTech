@@ -170,8 +170,26 @@ def stage_structured_relations(session: Session, source_doc, relations: list[dic
             continue
 
         subj_type = str(rel.get("subject_type") or "person").strip()
-        subj_uri = WD_NS + _slugify(subject)
-        ensure(subj_uri, subject, subj_type)
+
+        # Entity-resolve non-person subjects (project/certification/activity/
+        # reference names — see render.py:structured_to_relations) the same
+        # way object entities are resolved below. Without this, Path A staged
+        # these subjects under a raw, unresolved slug while Path B (which runs
+        # entity resolution over its whole generated graph, including
+        # subjects) staged the canonicalized form — two different `uri`
+        # values for the same real-world entity that the Neo4j MERGE step
+        # (which keys on exact uri) never collapses. "person" subjects are
+        # left as-is: the person's canonical identity is fixed per document
+        # and isn't the resolver's concern here.
+        canonical_subject = subject
+        if resolver is not None and subj_type != "person":
+            try:
+                res = resolver.resolve(subject, subj_type)
+                canonical_subject = res.canonical_form or subject
+            except Exception:
+                canonical_subject = subject
+        subj_uri = WD_NS + _slugify(canonical_subject)
+        ensure(subj_uri, canonical_subject, subj_type)
 
         if str(rel.get("object_type", "entity")).lower() == "literal":
             _add_literal(nodes[subj_uri], prop, obj)

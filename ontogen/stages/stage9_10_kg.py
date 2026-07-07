@@ -93,7 +93,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 from stages.llm import call_llm
-from config import OUTPUTS_DIR, MAX_PROMPT_CHARS, ENTITY_RESOLUTION_ENABLED, LLM_MODEL
+from config import (
+    OUTPUTS_DIR, MAX_PROMPT_CHARS, ENTITY_RESOLUTION_ENABLED, LLM_MODEL,
+    LLM_TOKENS_FACTS, LLM_TOKENS_FACTS_RETRY,
+)
 
 # ── Fact-extraction prompt (JSON, not Turtle) ───────────────────────────────
 
@@ -526,7 +529,7 @@ def generate_facts(
     feedback: str = "",
     temperature: float | None = None,
     subject_hint: str = "",
-) -> str:
+) -> tuple[str, bool]:
     answered  = [p for p in qa_pairs if not _is_unanswered(p["answer"])]
     n_dropped = len(qa_pairs) - len(answered)
     if n_dropped:
@@ -559,19 +562,41 @@ def generate_facts(
         f"{', with retry feedback' if feedback else ''}) …",
         flush=True,
     )
-    raw = call_llm(
-        prompt,
-        max_tokens=3000,  # was 1500 — too small for ~40 facts, caused
-                          # mid-array truncation (response cut off at
-                          # exactly the char count reported below)
-        temperature=temperature,
-        guided_json=_FACTS_JSON_SCHEMA,  # kept for vLLM compatibility;
-                                          # Ollama silently ignores this,
-                                          # which is why _parse_facts no
-                                          # longer assumes clean JSON back
-    )
+
+    def _call(max_tokens: int) -> tuple[str, str]:
+        return call_llm(
+            prompt,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            guided_json=_FACTS_JSON_SCHEMA,  # kept for vLLM compatibility;
+                                              # Ollama silently ignores this,
+                                              # which is why _parse_facts no
+                                              # longer assumes clean JSON back
+            return_finish_reason=True,
+        )
+
+    raw, finish = _call(LLM_TOKENS_FACTS)
+    # DeepSeek-R1 spends its budget reasoning before ever writing the JSON
+    # array; if that reasoning alone exceeds LLM_TOKENS_FACTS, _strip_think
+    # returns "" and finish_reason == "length". Without this check that empty
+    # string reaches _parse_facts, which reports a generic "JSON did not
+    # parse" — indistinguishable from the model genuinely emitting garbage —
+    # and the caller retries at the SAME budget, guaranteeing the same
+    # failure every attempt and silently dropping the whole chunk. Retry
+    # once at a larger budget instead, mirroring call_llm_answer's contract.
+    truncated = (finish == "length") or (not raw)
+    if truncated:
+        print(
+            f"[Stage 9/10]   ⚠ fact generation truncated/empty at "
+            f"max_tokens={LLM_TOKENS_FACTS} (reasoning likely exceeded budget) "
+            f"— retrying at max_tokens={LLM_TOKENS_FACTS_RETRY}",
+            flush=True,
+        )
+        raw, finish = _call(LLM_TOKENS_FACTS_RETRY)
+        truncated = (finish == "length") or (not raw)
+
     print(f"[Stage 9/10]   ✓ got {len(raw)} chars back", flush=True)
-    return raw
+    return raw, truncated
 
 
 def parse_rdf(turtle_str: str):
@@ -677,11 +702,11 @@ def _run_single_chunk(
     """
     g, accepted, violations, raw = None, 0, [], ""
     feedback = ""
-    best_g, best_accepted = None, -1
+    best_g, best_accepted, best_clean = None, -1, False
 
     for attempt in range(1, MAX_ATTEMPTS + 1):
         temp = None if attempt == 1 else RETRY_TEMPERATURE
-        raw = generate_facts(
+        raw, truncated = generate_facts(
             doc_text, qa_pairs, ontology_labels,
             feedback=feedback, temperature=temp,
             subject_hint=subject_hint,
@@ -690,13 +715,23 @@ def _run_single_chunk(
 
         if facts is None:
             print(
-                f"[Stage 9/10]   [{chunk_label}] attempt {attempt}: {parse_err}",
+                f"[Stage 9/10]   [{chunk_label}] attempt {attempt}: {parse_err}"
+                f"{' (truncated even after budget retry)' if truncated else ''}",
                 flush=True,
             )
-            feedback = _format_feedback([
-                f"Your last output could not be read as a JSON array ({parse_err}). "
-                f"Output ONLY a valid JSON array, nothing else."
-            ])
+            if truncated:
+                # generate_facts() already retried once at a bigger budget and
+                # still came back empty/cut-off — telling the model to "output
+                # valid JSON" won't fix a budget problem, so don't pretend
+                # this was a formatting mistake. Retry unchanged (still worth
+                # another attempt — reasoning length varies run to run) but
+                # without misleading corrective feedback.
+                feedback = ""
+            else:
+                feedback = _format_feedback([
+                    f"Your last output could not be read as a JSON array ({parse_err}). "
+                    f"Output ONLY a valid JSON array, nothing else."
+                ])
             continue
 
         g, accepted, violations = build_graph_from_facts(facts, predicate_map)
@@ -706,8 +741,13 @@ def _run_single_chunk(
             flush=True,
         )
 
-        if accepted > best_accepted:
-            best_g, best_accepted = g, accepted
+        # Prefer a clean (no-violation) attempt over a dirtier one with more
+        # raw accepted facts — a later low-temperature retry that fixed every
+        # violation is a better result than an earlier noisier one, even if
+        # it happened to accept fewer facts.
+        is_clean = not violations
+        if not best_clean and (is_clean or accepted > best_accepted):
+            best_g, best_accepted, best_clean = g, accepted, is_clean
 
         if not violations:
             break  # clean result — stop here for this chunk

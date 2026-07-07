@@ -85,8 +85,8 @@ import json, re, sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from stages.llm import call_llm
-from config import OUTPUTS_DIR, SCHEMA_EXPANSION
+from stages.llm import call_llm_answer
+from config import OUTPUTS_DIR, SCHEMA_EXPANSION, LLM_TOKENS_DEFINE, LLM_TOKENS_RETRY
 
 NEW_PROP_PROMPT = """\
 Use the relations (properties) and their usage comments to
@@ -272,7 +272,13 @@ def _new_prop_turtle(extracted: dict) -> str:
         f"[Stage 7/8]   generating Turtle for new property '{extracted['property']}' …",
         flush=True,
     )
-    raw = call_llm(prompt, max_tokens=300)
+    raw, truncated = call_llm_answer(
+        prompt, LLM_TOKENS_DEFINE, retry_budget=LLM_TOKENS_RETRY
+    )
+    if truncated:
+        print(f"[Stage 7/8]   ⚠ Turtle generation truncated for "
+              f"'{extracted['property']}' (reasoning exceeded budget) — the block "
+              f"may be incomplete and fail validation", flush=True)
     print(f"[Stage 7/8]   ✓ got {len(raw)} chars back", flush=True)
     raw = raw.replace("```turtle", "").replace("```", "").strip()
 
@@ -298,6 +304,33 @@ def build_ontology(match_results: list[dict]) -> tuple[str, dict[str, str]]:
     seen_canon_blocks:  set[str] = set()   # dedup canon-store reuses by exact text
     seen_new_props: dict[str, str] = {}    # lower(label) → turtle block
     new_prop_map:   dict[str, str] = {}    # label → turtle block (for EDC)
+    attempted_new_props: set[str] = set()  # lower(label) generated once (valid OR not)
+
+    def _generate_new_prop(extracted: dict) -> None:
+        """Mint a Turtle block for a property with no Wikidata/canon match yet
+        (or a canon match whose stored turtle is missing/empty). One attempt
+        per unique property label; invalid blocks are dropped with a diagnostic."""
+        key = extracted["property"].strip().lower()
+        if key in seen_new_props or key in attempted_new_props:
+            # Already generated (valid) OR already tried once and dropped as
+            # invalid. Either way, do NOT regenerate per occurrence — that is
+            # what made a 34-skill résumé run 34 identical hasSkill Turtle
+            # generations (each one failing validation, none ever cached).
+            return
+
+        attempted_new_props.add(key)  # one generation attempt per unique property
+        block = _new_prop_turtle(extracted)
+        valid, diag = _validate_turtle_block(block, extracted["property"])
+        if not valid:
+            print(
+                f"[Stage 7/8]   dropping invalid Turtle block for "
+                f"'{extracted['property']}': {diag}",
+                flush=True,
+            )
+            return
+
+        seen_new_props[key] = block
+        new_prop_map[extracted["property"]] = block
 
     for item in match_results:
         extracted = item["extracted"]
@@ -321,29 +354,25 @@ def build_ontology(match_results: list[dict]) -> tuple[str, dict[str, str]]:
                 seen_canon_blocks.add(normalized)
                 turtle_blocks.append(existing_turtle)
             else:
-                # Canon entry predates turtle storage — fall through to generate
-                pass
+                # Canon entry predates turtle storage: generate one now instead
+                # of silently dropping the property (previously a bare `pass`
+                # here meant the property never got a turtle block at all —
+                # no Wikidata block, no canon block, no generated block — and
+                # every fact using it was later rejected in Stage 9 as "not in
+                # the ontology" with no way to tell it apart from a genuine
+                # hallucinated predicate).
+                if not SCHEMA_EXPANSION:
+                    continue
+                print(
+                    f"[Stage 7/8]   canon match for '{extracted['property']}' has "
+                    f"no stored turtle — generating one now", flush=True,
+                )
+                _generate_new_prop(extracted)
 
         else:
             if not SCHEMA_EXPANSION:
                 continue  # target-schema-constrained mode: discard
-
-            key = extracted["property"].strip().lower()
-            if key in seen_new_props:
-                continue  # duplicate property name — reuse already-generated block
-
-            block = _new_prop_turtle(extracted)
-            valid, diag = _validate_turtle_block(block, extracted["property"])
-            if not valid:
-                print(
-                    f"[Stage 7/8]   dropping invalid Turtle block for "
-                    f"'{extracted['property']}': {diag}",
-                    flush=True,
-                )
-                continue
-
-            seen_new_props[key] = block
-            new_prop_map[extracted["property"]] = block
+            _generate_new_prop(extracted)
 
     turtle_blocks.extend(seen_new_props.values())
     return "\n".join(turtle_blocks), new_prop_map

@@ -1,0 +1,66 @@
+[
+  {
+    "property": "used tool",
+    "description": "The tools used to develop a simulation or system."
+  },
+  {
+    "property": "programming language",
+    "description": "The programming language used in a project."
+  },
+  {
+    "property": "machine learning algorithm",
+    "description": "The algorithm used for policy optimization."
+  },
+  {
+    "property": "number of aircraft",
+    "description": "The count of aircraft involved in a simulation."
+  },
+  {
+    "property": "number of programs",
+    "description": "The count of programs in a suite."
+  },
+  {
+    "property": "implemented concept",
+    "description": "The concepts implemented in a suite."
+  },
+  {
+    "property": "strategy",
+    "description": "The strategies used in a suite."
+  },
+  {
+    "property": "used software",
+    "description": "The software used to design a system."
+  },
+  {
+    "property": "applied concept",
+    "description": "The concepts applied in a design."
+  },
+  {
+    "property": "modulation type",
+    "description": "The type of modulation used in a system."
+  },
+  {
+    "property": "has module",
+    "description": "The modules designed as part of a project."
+  },
+  {
+    "property": "optimized area",
+    "description": "The areas optimized in a design."
+  },
+  {
+    "property": "used library",
+    "description": "The libraries used to train and deploy models."
+  },
+  {
+    "property": "learning type",
+    "description": "The type of learning used in models."
+  },
+  {
+    "property": "used tool",
+    "description": "The tool used for real-time tracking."
+  },
+  {
+    "property": "architected function",
+    "description": "The functions architected in a project."
+  }
+]

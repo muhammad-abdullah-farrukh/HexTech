@@ -94,10 +94,10 @@ def call_llm(prompt: str, max_tokens: int | None = None,
             data = resp.json()
             choice = data["choices"][0]
             content = _strip_think(choice["message"]["content"] or "")
+            finish_reason = choice.get("finish_reason", "stop")
             if not content:
                 print("[llm] ⚠ empty content after stripping reasoning — check "
                       "max_tokens isn't too tight for this prompt.", flush=True)
-            finish_reason = choice.get("finish_reason", "stop")
             if finish_reason == "length":
                 print(f"[llm] ⚠ output truncated by max_tokens={max_tokens} "
                       f"— response was cut off mid-generation.", flush=True)
@@ -130,3 +130,35 @@ def call_llm(prompt: str, max_tokens: int | None = None,
                 raise
 
     raise last_exc
+
+
+def call_llm_answer(prompt: str, max_tokens: int, *,
+                    retry_budget: int | None = None, **kw) -> tuple[str, bool]:
+    """Call the LLM for a real (short) answer that follows a <think> block.
+
+    deepseek-r1 spends its budget reasoning before answering; if max_tokens is
+    too small the response is cut off mid-<think> and _strip_think returns "".
+    Returns (content, truncated). `truncated` is True when the model was still
+    reasoning at the cap (finish_reason == "length") or nothing survived the
+    think-strip.
+
+    IMPORTANT for callers: truncated=True means "no trustworthy answer" — an
+    INDETERMINATE result to flag/skip, NOT a negative/reject. Feeding the empty
+    string into a yes/no parser (which reads "" as "no") is exactly the silent
+    failure this wrapper exists to prevent.
+
+    On truncation, retries ONCE at `retry_budget` (only if it exceeds
+    max_tokens) before giving up.
+    """
+    content, finish = call_llm(
+        prompt, max_tokens=max_tokens, return_finish_reason=True, **kw
+    )
+    truncated = (finish == "length") or (not content)
+    if truncated and retry_budget and retry_budget > max_tokens:
+        print(f"[llm] ↻ retrying truncated call at max_tokens={retry_budget} "
+              f"(was {max_tokens})", flush=True)
+        content, finish = call_llm(
+            prompt, max_tokens=retry_budget, return_finish_reason=True, **kw
+        )
+        truncated = (finish == "length") or (not content)
+    return content, truncated
