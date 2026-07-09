@@ -1,0 +1,12 @@
+rdflib>=6.0.0
+sentence-transformers>=2.2.0
+numpy>=1.24.0
+requests>=2.28.0
+tqdm>=4.65.0
+
+# Postgres integration (Part 2). Shares one database with ocr_resume_parser;
+# ontogen/db/ imports resume_parser via sys.path, so run Ontogen inside that repo's venv.
+sqlalchemy>=2.0
+psycopg2-binary
+alembic
+pgvector

@@ -1,0 +1,95 @@
+ABDULLAH ZAHID | ELECTRICAL ENGINEER
+
++92-3125722830
+abdullahzahid6555@gmail.com
+www.linkedin.com/in/abdullahzahid655
+github.com/abdullahzahid655
+House No. 993, Street 40, Islamabad, Pakistan
+DOB: 22nd Sep 2003
+
+PROFESSIONAL PROFILE
+Dynamic Machine Learning Engineer with electrical engineering roots, pioneering AI via NASTP CENTAIC internship on Reinforcement Learning using DQN for optimal decision-making. Over a year building ML models for satellite, energy, and IoT using Python, C++, MATLAB, and algorithms like regression, KNN, SVM; mastered end-to-end pipelines driving CubeSat/SDR efficiency with CodeCarbon. Expert in simulations (MATLAB/Simulink, FPGA), hardware integration, and freelance leadership for scalable DQN/automation in energy/space tech.
+
+EDUCATION
+
+BSc Electrical Engineering | Air University, Islamabad | Sept 2021 – June 2025 | CGPA 2.62/4.0
+- Coursework: Embedded Systems, Control Systems, Circuits, Programming (C++, HTML, Python), Renewable Energy, PCB Design, Data Structures & Algorithms, Artificial Intelligence & Machine Learning.
+- Specialized knowledge: AI/ML model development, Reinforcement Learning (DQN), IoT data pipelines, intelligent automation, scalable system design.
+
+FSc Pre Engineering | OPF College, Islamabad | March 2019 – April 2021 | Marks 70/100%
+
+Matric Sciences | Pakistan Intl. School, Jeddah, KSA | May 2017 – Feb 2019 | Marks 82.73%
+
+CAREER SUMMARY
+
+Nov 2025 – Present | NASTP Center of Artificial Intelligence Cluster, Rawalpindi, Pakistan
+Reinforcement Learning Intern
+A premier hub for aerospace and AI innovation; here, I serve as a Reinforcement Learning Intern, pioneering intelligent decision-making agents for dynamic environments. My work blends cutting-edge RL research with practical simulations, focusing on autonomous swarming and tactical aerial coordination for high-fidelity defense applications.
+
+Key Responsibilities:
+- Design and train advanced RL agents from scratch using DQN and PPO architectures, optimizing complex reward systems to ensure stable policy convergence within custom-engineered environments.
+- Develop end-to-end data pipelines for agent training, utilizing NumPy for mathematical modeling and Matplotlib for visualizing quantitative metrics to justify algorithmic performance in task reports.
+
+Key Achievements:
+- Successfully engineered a 1v1 pursuit-evasion simulation using JSBSim and OpenAI Gym, achieving optimal "tail-chase" positioning by implementing PPO algorithms and precise reward-shaping for flight dynamics.
+- Currently in-progress: Architecting a multi-agent 2v1 coordination framework to enable team-based swarming behavior, where two agents collaborate via shared reward signals to intercept a high-speed target agent.
+
+Aug 2023 – Sept 2024 | Freelance Machine Learning Engineer (self-employed)
+As a freelance specialist, I provided tailored AI solutions for global clients, focusing on bridging the gap between raw data and intelligent decision-support tools for business automation. My role involved building scalable ML models and optimizing data pipelines to enhance operational efficiency across diverse sectors like energy and IoT.
+
+Key Responsibilities:
+- Designed and deployed predictive models — including Regression, KNN, and SVM architectures — while managing the complete lifecycle from data cleaning to real-time deployment for autonomous agents.
+- Optimized business intelligence workflows by integrating CodeCarbon into the ML pipeline, allowing clients to track the real-time carbon footprint of their model training sessions without sacrificing performance.
+
+July 2023 – May 2024 | Shocks & Stars Engineering, Ltd, Islamabad, Pakistan
+Project Leader in Satellite Control Unit
+Shocks & Stars is an aerospace consultancy renowned for delivering high-integrity engineering solutions; in my role as Project Leader, I headed the development of the Satellite Control Unit. I led the integration of AI-driven optimization within embedded systems, specifically focusing on low-power CubeSat modules and SDR communication.
+
+Key Responsibilities:
+- Led the design and deployment of embedded systems using ESP32 microcontrollers and Verilog-based logic, integrating Software Defined Radio (SDR) for real-time telemetry and data transmission.
+- Developed system modeling pipelines in MATLAB and Python to simulate, test, and validate aerospace hardware behavior under varied operating conditions to meet rigorous technical standards.
+
+Key Achievements:
+- Successfully delivered a low-power optimization algorithm for CubeSat Power Control Units (PCU) that aligned with aerospace reliability standards, achieved through rigorous hardware debugging and FPGA-based simulation.
+
+ACADEMIC & WORK ACHIEVEMENTS
+- Engineered a multi-agent pursuit-evasion simulation involving two aircraft using JSBSim and OpenAI Gym in Python with PyTorch for policy optimization by understanding flight dynamics, PPO (Proximal Policy Optimization) algorithms, and tactical decision-making.
+- Developed a specialized Reinforcement Learning suite consisting of three programs using Python with Deep Q-Network (DQN) concepts by implementing Experience Replay, Target Networks, and Epsilon-Greedy exploration strategies to teach machines optimal decision-making.
+- Designed Analog and Acoustic Wireless Communication Systems using MATLAB with ADC/DAC interfacing concepts by understanding signal processing, FSK modulation, and carrier synchronization for acoustic data transmission.
+- Trained and deployed predictive optimization models using Scikit-learn in Python with Supervised Learning fundamentals by understanding KNN, Naive Bayes, Logistic Regression, and SVM architectures while integrating CodeCarbon for real-time carbon footprint tracking.
+- Led the design of CubeSat Power Control Units (PCU) and SDR modules using MATLAB/Simulink and FPGA-based hardware with power management concepts by optimizing solar energy harvesting, thermal management, and high-frequency signal processing.
+- Architected complex reward-shaping functions and real-time visual analytics using NumPy and Matplotlib in Python by understanding mathematical modeling and training convergence metrics for high-fidelity aerial combat environments.
+
+EXTRACURRICULAR ACTIVITIES
+
+Amazon Assistant Online Marketing – Certified
+- Completed a professional course on Amazon Assistant for online marketing and received certification.
+
+Seminar Presenter (PCU Representative)
+- Delivered technical presentations on Low Orbit Satellites and demonstrated the communication framework of Software-Defined Radio Systems.
+
+IEEE Power & Energy Society – Student Member
+- Actively participated in professional development sessions, technical talks, and networking events on modern power and energy solutions.
+
+Campus Energy Audit Initiative – Organizer
+- Led a student team in conducting a university-wide energy consumption survey, identifying power losses and recommending cost-saving efficiency measures.
+
+LANGUAGES
+- English (C2 level)
+- Urdu (C2 level)
+- Arabic (A1 level)
+- French (A1 level)
+
+SOFTWARE
+- Python (PyTorch, JSBSim, DQN, OpenAI Gym, NumPy/Matplotlib, Scikit-learn)
+- MATLAB & Simulink (Control Systems, Power Flow Analysis, FPGA Simulation, System Modeling, SDR/CubeSat Efficiency)
+- C / C++ (Embedded Firmware, Arduino IDE, ESP32 Integration, Keil uVision, MicroC, Data Structures)
+- Electrical Design & Simulation (ETAP, SKM, AutoCAD Electrical, Power World, PSpice, KiCad, Altium, Proteus)
+- Development Tools (Jupyter Notebooks, Anaconda, Visual Studio, GitHub/Version Control, SolidWorks)
+
+REFERENCE
+
+Engr. Prof. Dr. Ali Sarosh
+Associate Professor at Air University Islamabad & CEO Shocks & Stars
+linkedin.com/in/dralisaroshs
+Relationship: Project Head of System Design and Demonstrator of a SPU Power Generation Sub-System of a Space Tug for Space Debris Remediation Operations in Lower Earth Orbit

@@ -1,0 +1,14 @@
+# Ignore large model/embedding files
+*.npy
+data/canon_store/embeddings.npy
+embeddings/wikidata_embeddings.npy
+
+# Ignore archives
+*.zip
+
+# Ignore local tool settings
+.claude/
+*.local.json
+
+# Ignore generated logs and outputs (optional, depending on if your team wants these versioned)
+outputs/logs/

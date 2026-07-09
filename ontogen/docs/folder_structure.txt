@@ -1,0 +1,74 @@
+ontogen/
+├── .claude/
+│   ├── settings.local.json
+├── README.md
+├── config.py
+├── convert_raw.py
+├── data/
+│   ├── canon_store/
+│   │   ├── embeddings.npy
+│   │   ├── entries.json
+│   ├── documents/
+│   │   ├── yourfile.txt
+│   ├── gazetteers/
+│   │   ├── certifications.json
+│   │   ├── companies.json
+│   │   ├── job_titles.json
+│   │   ├── skills.json
+│   │   ├── universities.json
+│   ├── wikidata/
+│   │   ├── properties_filtered.json
+├── embeddings/
+│   ├── wikidata_embeddings.npy
+├── farrukh_result1v2.zip
+├── graphdb/
+│   ├── config.py
+│   ├── load_to_neo4j.py
+│   ├── requirements.txt
+├── kg_pipeline_comparison.md
+├── lol.txt
+├── outputs/
+│   ├── answers/
+│   │   ├── cq_answers.json
+│   │   ├── yourfile.json
+│   ├── cqs/
+│   │   ├── yourfile.json
+│   ├── kg/
+│   │   ├── yourfile.ttl
+│   ├── logs/
+│   │   ├── stage6_yourfile.jsonl
+│   ├── matches/
+│   │   ├── yourfile.json
+│   ├── ontology/
+│   │   ├── ontology.ttl
+│   │   ├── yourfile.ttl
+│   ├── provenance/
+│   │   ├── yourfile.json
+│   │   ├── yourfile_entities.json
+│   ├── relations/
+│   │   ├── yourfile.json
+├── outputs.zip
+├── pipeline.py
+├── requirements.txt
+├── stages/
+│   ├── __init__.py
+│   ├── canonicalize.py
+│   ├── llm.py
+│   ├── provenance.py
+│   ├── stage1_cq_gen.py
+│   ├── stage2_cq_answer.py
+│   ├── stage3_relation_extract.py
+│   ├── stage4_filter_wikidata.py
+│   ├── stage5_embed_wikidata.py
+│   ├── stage6_match_validate.py
+│   ├── stage7_8_ontology.py
+│   ├── stage9_10_kg.py
+├── todo.txt
+├── wikidata_raw.json
+├── yourfile.md
+├── {data/
+│   ├── documents,data/
+│   │   ├── wikidata,embeddings,outputs/
+│   │   │   ├── {cqs,answers,relations,ontology,kg},stages}/
+│   ├── {raw,processed},embeddings,ontologies,kg_output,logs,scripts}/
+

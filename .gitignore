@@ -1,0 +1,6 @@
+.venv/
+.venv-marker/
+__pycache__/
+*.pyc
+ocr-resume-paser/.venv/
+ontogen/outputs/

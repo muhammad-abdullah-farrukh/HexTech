@@ -1,0 +1,74 @@
+[
+  {
+    "name": "candidate_name",
+    "type": "string",
+    "required": true,
+    "description": "Full legal name"
+  },
+  {
+    "name": "email",
+    "type": "string",
+    "required": true,
+    "description": "Primary contact email"
+  },
+  {
+    "name": "phone",
+    "type": "string",
+    "required": false,
+    "description": "Primary contact phone number"
+  },
+  {
+    "name": "years_experience",
+    "type": "object",
+    "required": true,
+    "description": "Total professional experience as years + months, computed from the work history date ranges",
+    "properties": [
+      { "name": "years", "type": "integer", "required": true, "description": "Whole years of professional experience" },
+      { "name": "months", "type": "integer", "required": true, "description": "Additional months beyond the whole years (0-11)" }
+    ]
+  },
+  {
+    "name": "skills",
+    "type": "array",
+    "items": "string",
+    "required": true,
+    "description": "Technical skills list"
+  },
+  {
+    "name": "work_history",
+    "type": "array",
+    "items": "object",
+    "required": false,
+    "description": "Employment entries",
+    "properties": [
+      { "name": "company", "type": "string", "required": true },
+      { "name": "title", "type": "string", "required": true },
+      { "name": "start_date", "type": "string", "required": false },
+      { "name": "end_date", "type": "string", "required": false }
+    ]
+  },
+  {
+    "name": "projects",
+    "type": "array",
+    "items": "object",
+    "required": false,
+    "description": "Projects the candidate built or contributed to",
+    "properties": [
+      { "name": "name", "type": "string", "required": true, "description": "Project name or short title" },
+      { "name": "description", "type": "string", "required": false, "description": "What the project does / the candidate's contribution" },
+      { "name": "technologies", "type": "array", "items": "string", "required": false, "description": "Tools, languages, or frameworks used" }
+    ]
+  },
+  {
+    "name": "education",
+    "type": "array",
+    "items": "object",
+    "required": false,
+    "description": "Education entries",
+    "properties": [
+      { "name": "institution", "type": "string", "required": true },
+      { "name": "degree", "type": "string", "required": false },
+      { "name": "graduation_year", "type": "string", "required": false }
+    ]
+  }
+]

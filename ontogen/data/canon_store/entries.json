@@ -1,0 +1,474 @@
+[
+  {
+    "id": "canon_000000",
+    "label": "phone number",
+    "definition": "A primary telephone number used to contact the individual.",
+    "turtle": "wdt:PhoneNumberOf a wikibase:Property ;\n    schema:description \"The contact phone number of the subject.\" ;\n    rdfs:label \"phone number\" ;\n    rdfs:domain owl:Thing ;\n    rdfs:range xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.944366+00:00"
+  },
+  {
+    "id": "canon_000001",
+    "label": "email address",
+    "definition": "An electronic mail identifier used for communication with the subject.",
+    "turtle": "wdt:emailAddress a wikibase:Property ;\n    schema:description \"The email address associated with the subject.\" ;\n    rdfs:label \"email address\" ;\n    rdfs:domain owl:Thing ;\n    rdfs:range xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.950694+00:00"
+  },
+  {
+    "id": "canon_000002",
+    "label": "LinkedIn profile URL",
+    "definition": "A web address pointing to the subject's professional profile on LinkedIn, used to access their online resume and professional information.",
+    "turtle": "wdt:LinkedInProfileURL a wikibase:Property ;\n    rdfs:label \"LinkedIn profile URL\" ;\n    schema:description \"The URL of the subject's LinkedIn profile.\" ;\n    rdfs:domain wd:Person, wd:Organization, wd:PublicFigure ;\n    rdfs:range xsd:anyURI .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.959195+00:00"
+  },
+  {
+    "id": "canon_000003",
+    "label": "GitHub profile URL",
+    "definition": "A hyperlink pointing to the subject's public profile on the GitHub platform, used to access their software development activity and contributions.",
+    "turtle": "wdt:GitHubProfileURL a wikibase:Property ;\n    rdfs:label \"GitHub profile URL\" ;\n    schema:description \"The URL of the subject's GitHub profile.\" ;\n    rdfs:domain wd:Person, wd:Organization, wd:SoftwareDeveloper ;\n    rdfs:range xsd:anyURI .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.967147+00:00"
+  },
+  {
+    "id": "canon_000004",
+    "label": "professional role",
+    "definition": "The professional role denotes the individual's current or most significant position in their career, typically reflecting their primary occupational identity.",
+    "turtle": "wdt:ProfessionalRole a wikibase:Property ;\n    rdfs:label \"professional role\" ;\n    rdfs:comment \"The current or most relevant professional role of the subject.\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range wd:ProfessionalRoleType .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.973848+00:00"
+  },
+  {
+    "id": "canon_000005",
+    "label": "field of engineering",
+    "definition": "The branch of engineering in which a person specializes, indicating their technical expertise and professional focus within the field of engineering.",
+    "turtle": "wdt:field_of_engineering a wikibase:Property ;\n    rdfs:label \"field of engineering\" ;\n    rdfs:comment \"The specific branch of engineering the subject is specialized in.\" ;\n    rdfs:domain wd:engineer, wd:engineering_discipline, wd:engineering_project ;\n    rdfs:range wd:branch_of_engineering .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.980371+00:00"
+  },
+  {
+    "id": "canon_000006",
+    "label": "location",
+    "definition": "The geographic location of an entity, specified as a city and country, indicating where it is situated.",
+    "turtle": "wdt:Location a wikibase:Property ;\n    schema:description \"The city and country where an educational institution is located.\" ;\n    rdfs:label \"location\" ;\n    rdfs:domain wd:educational_institution ;\n    rdfs:range wd:location .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.987230+00:00"
+  },
+  {
+    "id": "canon_000007",
+    "label": "CGPA",
+    "definition": "The numerical representation of overall academic performance in a degree program, calculated as the average of all grade points earned.",
+    "turtle": "wdt:CGPA a wikibase:Property ;\n    schema:description \"The cumulative grade point average achieved in an academic program.\" ;\n    rdfs:label \"CGPA\" ;\n    rdfs:domain wd:AcademicProgram, wd:StudentRecord ;\n    rdfs:range xsd:float .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:38.995868+00:00"
+  },
+  {
+    "id": "canon_000008",
+    "label": "core courses",
+    "definition": "The fundamental academic courses completed as part of an educational program, typically reflecting the main subject areas studied by a student.",
+    "turtle": "wdt:CoreCourses a wikibase:Property ;\n    schema:description \"The fundamental academic courses completed in an educational program.\" ;\n    rdfs:label \"core courses\" ;\n    rdfs:domain wd:AcademicProgram, wd:EducationalProgram ;\n    rdfs:range wd:Course, wd:AcademicCourse .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.002405+00:00"
+  },
+  {
+    "id": "canon_000009",
+    "label": "specialized knowledge",
+    "definition": "The technical or theoretical knowledge areas specifically developed through formal education or training.",
+    "turtle": "wdt:SpecializedKnowledge a wikibase:Property ;\n    schema:description \"The specific technical or theoretical knowledge areas developed in an educational program.\" ;\n    rdfs:label \"specialized knowledge\" ;\n    rdfs:domain wd:educational_program, wd:academic_degree, wd:training_course ;\n    rdfs:range rdfs:Resource .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.008899+00:00"
+  },
+  {
+    "id": "canon_000010",
+    "label": "institution",
+    "definition": "The educational institution where an individual completed a secondary or pre-university level academic qualification.",
+    "turtle": "wdt:institution a wikibase:Property ;\n    rdfs:label \"institution\" ;\n    rdfs:comment \"The name of the school or college where a secondary or pre-university qualification was obtained.\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range wd:EducationalOrganization .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.015710+00:00"
+  },
+  {
+    "id": "canon_000011",
+    "label": "duration of program",
+    "definition": "The length of time required to complete a secondary or pre-university educational qualification.",
+    "turtle": "wdt:P381 a wikibase:Property ;\n    schema:description \"The time period over which a secondary or pre-university qualification was completed.\" ;\n    rdfs:label \"duration of program\" ;\n    rdfs:domain wd:educational_program, wd:academic_qualification, wd:secondary_education ;\n    rdfs:range xsd:duration .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.022309+00:00"
+  },
+  {
+    "id": "canon_000012",
+    "label": "performance percentage",
+    "definition": "The proportion of maximum possible marks obtained by a person in an academic qualification, expressed as a percentage.",
+    "turtle": "wdt:PerformancePercentage a wikibase:Property ;\n    schema:description \"The percentage of marks achieved in an academic qualification.\" ;\n    rdfs:label \"performance percentage\" ;\n    rdfs:domain wd:AcademicQualification ;\n    rdfs:range xsd:float .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.029058+00:00"
+  },
+  {
+    "id": "canon_000013",
+    "label": "duration of role",
+    "definition": "The time period during which an individual occupied a particular job role, indicating when the role began and ended.",
+    "turtle": "wdt:P39 a wikibase:Property ;\n    schema:description \"The time period during which a specific job role was held.\" ;\n    rdfs:label \"duration of role\" ;\n    rdfs:domain wd:office, wd:position_held, wd:job_title ;\n    rdfs:range xsd:duration .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.035916+00:00"
+  },
+  {
+    "id": "canon_000014",
+    "label": "responsibilities",
+    "definition": "The primary tasks or duties an individual is accountable for performing in a professional role.",
+    "turtle": "wdt:Responsibilities a wikibase:Property ;\n    schema:description \"The key tasks or duties performed in a job role.\" ;\n    rdfs:label \"responsibilities\" ;\n    rdfs:domain wd:JobRole, wd:Occupation, wd:Position ;\n    rdfs:range rdfs:Literal .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.042441+00:00"
+  },
+  {
+    "id": "canon_000015",
+    "label": "achievements",
+    "definition": "The accomplishments or successes an individual has achieved during their professional experience, reflecting impact or value added in their role.",
+    "turtle": "wdt:Achievements a wikibase:Property ;\n    schema:description \"The notable accomplishments made in a job role.\" ;\n    rdfs:label \"achievements\" ;\n    rdfs:domain wd:JobRole, wd:Occupation, wd:Position ;\n    rdfs:range rdfs:Literal .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.048852+00:00"
+  },
+  {
+    "id": "canon_000016",
+    "label": "simulation tools",
+    "definition": "The software applications employed to perform simulations, typically within technical or scientific domains.",
+    "turtle": "wdt:SimulationTools a wikibase:Property ;\n    schema:description \"The software tools used for conducting simulations.\" ;\n    rdfs:label \"simulation tools\" ;\n    rdfs:domain wd:simulation, wd:modeling_process, wd:experiment ;\n    rdfs:range wd:software_tool, wd:simulation_software, wd:computational_tool .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.055364+00:00"
+  },
+  {
+    "id": "canon_000017",
+    "label": "algorithm",
+    "definition": "The machine learning or computational method applied in a technical context, typically associated with technical skills or project implementations.",
+    "turtle": "wdt:Algorithm a wikibase:Property ;\n    schema:description \"The specific machine learning or computational algorithm used.\" ;\n    rdfs:label \"algorithm\" ;\n    rdfs:domain wd:computational_model, wd:experiment, wd:software, wd:research_study ;\n    rdfs:range wd:decision_tree, wd:neural_network, wd:svm, wd:random_forest, wd:gradient_boosting, wd:logistic_regression, wd:kmeans, wd:naive_bayes .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.062593+00:00"
+  },
+  {
+    "id": "canon_000018",
+    "label": "tools",
+    "definition": "The specific software, frameworks, or technologies utilized by a professional to enhance productivity or streamline tasks.",
+    "turtle": "wdt:Tools a wikibase:Property ;\n    schema:description \"The specific software or frameworks used to optimize workflows\" ;\n    rdfs:label \"tools\" ;\n    rdfs:domain wd:workflow, wd:process, wd:system ;\n    rdfs:range wd:software, wd:framework, wd:application .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.069535+00:00"
+  },
+  {
+    "id": "canon_000019",
+    "label": "hardware platforms",
+    "definition": "The hardware platforms relation denotes the specific physical computing systems or devices used for the development or deployment of embedded software or applications.",
+    "turtle": "wdt:hardwarePlatforms a wikibase:Property ;\n    schema:description \"The specific hardware used for developing or deploying embedded systems.\" ;\n    rdfs:label \"hardware platforms\" ;\n    rdfs:domain wd:embedded_system, wd:software, wd:application ;\n    rdfs:range wd:computer_hardware, wd:processor, wd:development_board, wd:platform .",
+    "source_doc": "yourfile",
+    "added_at": "2026-06-30T11:09:39.076375+00:00"
+  },
+  {
+    "id": "canon_000020",
+    "label": "location of university",
+    "definition": "The city or geographic location where the subject attended or was affiliated with a university.",
+    "turtle": "wdt:location_of_university a wikibase:Property ;\n    rdfs:label \"location of university\" ;\n    rdfs:comment \"The city where the subject's university is located.\" ;\n    rdfs:domain wd:University ;\n    rdfs:range wd:City .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.014714+00:00"
+  },
+  {
+    "id": "canon_000021",
+    "label": "duration of degree",
+    "definition": "The time period during which an educational degree was undertaken, indicating when the study began and ended.",
+    "turtle": "wdt:P585 a wikibase:Property ;\n    rdfs:label \"duration of degree\" ;\n    rdfs:comment \"The time period in which a degree was pursued.\" ;\n    rdfs:domain wd:educational_achievement ;\n    rdfs:range xsd:duration .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.021362+00:00"
+  },
+  {
+    "id": "canon_000022",
+    "label": "location of college",
+    "definition": "The geographic city where the individual's college for higher secondary education (FSc) is situated.",
+    "turtle": "wdt:location_of_college a wikibase:Property ;\n    rdfs:label \"location of college\" ;\n    rdfs:comment \"The city where the FSc college is located.\" ;\n    rdfs:domain wd:FSc_college ;\n    rdfs:range schema:City .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.028202+00:00"
+  },
+  {
+    "id": "canon_000023",
+    "label": "marks percentage in FSc",
+    "definition": "The numerical percentage of marks obtained by a person in the FSc (Pre-Engineering or Pre-Medical) academic program.",
+    "turtle": "wdt:marks_percentage_in_FSc a wikibase:Property ;\n    schema:description \"The percentage of marks achieved in the FSc program.\" ;\n    rdfs:label \"marks percentage in FSc\" ;\n    rdfs:domain wd:person ;\n    rdfs:range xsd:float .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.034740+00:00"
+  },
+  {
+    "id": "canon_000024",
+    "label": "country of school",
+    "definition": "The country in which the individual's matriculation school is located.",
+    "turtle": "wdt:country_of_school a wikibase:Property ;\n    rdfs:label \"country of school\" ;\n    rdfs:comment \"The country where the matriculation school is located.\" ;\n    rdfs:domain wd:educational_institution ;\n    rdfs:range wd:country .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.041154+00:00"
+  },
+  {
+    "id": "canon_000025",
+    "label": "duration of matriculation",
+    "definition": "The time period during which an individual was officially enrolled in an educational institution.",
+    "turtle": "wdt:P123 a wikibase:Property ;\n    schema:description \"The time period in which the matriculation was completed.\" ;\n    rdfs:label \"duration of matriculation\" ;\n    rdfs:domain wd:MatriculationEvent ;\n    rdfs:range xsd:duration .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.047759+00:00"
+  },
+  {
+    "id": "canon_000026",
+    "label": "marks percentage in matriculation",
+    "definition": "The numerical percentage score attained by a person in their matriculation (secondary school) academic program.",
+    "turtle": "wdt:MarksPercentageInMatriculation a wikibase:Property ;\n    schema:description \"The percentage of marks achieved in the matriculation program.\" ;\n    rdfs:label \"marks percentage in matriculation\" ;\n    rdfs:domain wd:Person, wd:Student ;\n    rdfs:range xsd:float .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.054418+00:00"
+  },
+  {
+    "id": "canon_000027",
+    "label": "current employer",
+    "definition": "The organization that currently employs the individual.",
+    "turtle": "wdt:P56 a wikibase:Property ;\n    schema:description \"The organization where the subject is currently employed.\" ;\n    rdfs:label \"current employer\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range wd:Organization .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.060284+00:00"
+  },
+  {
+    "id": "canon_000028",
+    "label": "location of employer",
+    "definition": "The geographic city associated with the organization that currently employs the individual.",
+    "turtle": "wdt:location_of_employer a wikibase:Property ;\n    schema:description \"The city where the current employer is located.\" ;\n    rdfs:label \"location of employer\" ;\n    rdfs:domain wd:person ;\n    rdfs:range wd:city .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.066690+00:00"
+  },
+  {
+    "id": "canon_000029",
+    "label": "focus of work",
+    "definition": "The primary area or topic of the subject's professional activities.  \n\n**Definition:** The central professional area or subject matter that the person primarily engages with in their work.",
+    "turtle": "wdt:FocusOfWork a wikibase:Property ;\n    rdfs:label \"focus of work\" ;\n    rdfs:comment \"The primary area or topic of the subject's professional activities.\" ;\n    rdfs:domain wd:Person, wd:Organization, wd:Project ;\n    rdfs:range rdfs:Resource, wd:FieldOfStudy, wd:Topic, wd:Activity .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.073648+00:00"
+  },
+  {
+    "id": "canon_000030",
+    "label": "RL algorithm used",
+    "definition": "A reinforcement learning algorithm applied by a professional in a project listed on their resume.",
+    "turtle": "wdt:RL_algorithm_used a wikibase:Property ;\n    schema:description \"The reinforcement learning algorithm used in a project.\" ;\n    rdfs:label \"RL algorithm used\" ;\n    rdfs:domain wd:project, wd:research_study, wd:experiment, wd:software_development ;\n    rdfs:range wd:reinforcement_learning_algorithm, wd:learning_method, wd:ai_technique, wd:algorithm .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.080388+00:00"
+  },
+  {
+    "id": "canon_000031",
+    "label": "algorithm for positioning",
+    "definition": "The algorithm employed to determine or optimize an entity's position within a simulated environment.",
+    "turtle": "wdt:algorithm_for_positioning a wikibase:Property ;\n    schema:description \"The specific algorithm used to achieve a particular result in a simulation.\" ;\n    rdfs:label \"algorithm for positioning\" ;\n    rdfs:domain wd:simulation ;\n    rdfs:range wd:algorithm .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.087001+00:00"
+  },
+  {
+    "id": "canon_000032",
+    "label": "multi-agent framework name",
+    "definition": "The name of a system or architecture designed to enable coordination and interaction among multiple autonomous agents.",
+    "turtle": "wdt:multiAgentFrameworkName a wikibase:Property ;\n    rdfs:label \"multi-agent framework name\" ;\n    schema:description \"The name of the framework used for multi-agent coordination.\" ;\n    rdfs:domain wd:MultiAgentSystem ;\n    rdfs:range xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.093637+00:00"
+  },
+  {
+    "id": "canon_000033",
+    "label": "freelance company",
+    "definition": "The company or organization for which the person provided freelance services.",
+    "turtle": "wdt:freelance_company a wikibase:Property ;\n    schema:description \"The name of the company or entity for which the subject worked as a freelancer.\" ;\n    rdfs:label \"freelance company\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range wd:Organization .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.100020+00:00"
+  },
+  {
+    "id": "canon_000034",
+    "label": "role in freelance",
+    "definition": "The professional position or function occupied by an individual during a freelance engagement.",
+    "turtle": "wdt:RoleInFreelance a wikibase:Property ;\n    schema:description \"The position or function the subject held during freelance work.\" ;\n    rdfs:label \"role in freelance\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range rdfs:Literal .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.106170+00:00"
+  },
+  {
+    "id": "canon_000035",
+    "label": "duration of freelance role",
+    "definition": "The time period during which an individual performed freelance work, indicating when the engagement began and ended.",
+    "turtle": "wdt:duration_of_freelance_role a wikibase:Property ;\n    schema:description \"The time period in which the freelance work was carried out.\" ;\n    rdfs:label \"duration of freelance role\" ;\n    rdfs:domain wd:freelance_role ;\n    rdfs:range xsd:duration .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.112980+00:00"
+  },
+  {
+    "id": "canon_000036",
+    "label": "carbon tracking tool",
+    "definition": "A software tool designed to quantify and monitor greenhouse gas emissions associated with a project or activity.",
+    "turtle": "wdt:CarbonTrackingTool a wikibase:Property ;\n    schema:description \"The tool used to measure and track carbon footprint in a project.\" ;\n    rdfs:label \"carbon tracking tool\" ;\n    rdfs:domain wd:project, wd:environmental_assessment, wd:carbon_footprint_study ;\n    rdfs:range wd:software_tool, wd:carbon_measurement_tool, wd:environmental_monitoring_system .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.119987+00:00"
+  },
+  {
+    "id": "canon_000037",
+    "label": "location of organization",
+    "definition": "The geographic city associated with the organization linked to a person's professional activity.",
+    "turtle": "wdt:locationOfOrganization a wikibase:Property ;\n    rdfs:label \"location of organization\" ;\n    rdfs:comment \"The city where the project organization is located.\" ;\n    rdfs:domain wd:Organization ;\n    rdfs:range wd:City .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.126426+00:00"
+  },
+  {
+    "id": "canon_000038",
+    "label": "microcontroller used",
+    "definition": "A microcontroller used refers to the specific embedded system processor or integrated circuit employed by an individual in a technical project or application.",
+    "turtle": "wdt:MicrocontrollerUsed a wikibase:Property ;\n    rdfs:label \"microcontroller used\" ;\n    rdfs:comment \"The specific microcontroller used in a project.\" ;\n    rdfs:domain wd:Project, wd:ElectronicDevice, wd:EmbeddedSystem ;\n    rdfs:range wd:Microcontroller, wd:IntegratedCircuit, wd:Processor .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T06:47:56.133094+00:00"
+  },
+  {
+    "id": "canon_000039",
+    "label": "course",
+    "definition": "A course is an academic subject or sequence of subjects undertaken by a person as part of their educational background.",
+    "turtle": "wdt:Course a wikibase:Property ;\n    schema:description \"A specific academic subject or set of subjects taken by the subject.\" ;\n    rdfs:label \"course\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range wd:AcademicSubject .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T08:14:58.551712+00:00"
+  },
+  {
+    "id": "canon_000040",
+    "label": "project",
+    "definition": "A project is a specific initiative or task undertaken by a person, typically reflecting their professional work or developmental efforts.",
+    "turtle": "wdt:Project a wikibase:Property ;\n    schema:description \"A specific work or development project undertaken by the subject\" ;\n    rdfs:label \"project\" ;\n    rdfs:domain wd:person, wd:organization, wd:government, wd:company ;\n    rdfs:range wd:project, wd:initiative, wd:program, wd:development_program .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T08:14:58.558301+00:00"
+  },
+  {
+    "id": "canon_000041",
+    "label": "course name",
+    "definition": "The academic course title formally completed by an individual as part of their educational background.",
+    "turtle": "wdt:courseName a wikibase:Property ;\n    rdfs:label \"course name\" ;\n    rdfs:comment \"The title of a specific academic course completed by the subject.\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T08:14:58.564596+00:00"
+  },
+  {
+    "id": "canon_000042",
+    "label": "presentation title",
+    "definition": "A presentation title is the name given to a formal talk or seminar that the person has delivered.",
+    "turtle": "wdt:P1 a wikibase:Property ;\n    rdfs:label \"presentation title\"@en ;\n    schema:description \"The title of a seminar or technical presentation delivered by the subject.\"@en ;\n    rdfs:domain wd:Presentation, wd:Seminar, wd:TechnicalPresentation ;\n    rdfs:range xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T08:14:58.571150+00:00"
+  },
+  {
+    "id": "canon_000043",
+    "label": "university",
+    "definition": "The educational institution at which the person is currently enrolled as a student.",
+    "turtle": "wdt:University a wikibase:Property ;\n    schema:description \"The institution where the subject is currently studying.\" ;\n    rdfs:label \"university\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range wd:EducationalOrganization .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T09:29:41.233311+00:00"
+  },
+  {
+    "id": "canon_000044",
+    "label": "start date",
+    "definition": "The date marking the beginning of an individual's involvement in a role, position, or educational program.",
+    "turtle": "wdt:startDate a wikibase:Property ;\n    schema:description \"The date on which the subject began a program or position.\" ;\n    rdfs:label \"start date\" ;\n    rdfs:domain wd:position, wd:program, wd:employment, wd:role ;\n    rdfs:range xsd:date .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T09:29:41.239989+00:00"
+  },
+  {
+    "id": "canon_000045",
+    "label": "end date",
+    "definition": "The date marking the conclusion of a subject's involvement in a role, program, or position.",
+    "turtle": "wdt:endDate a wikibase:Property ;\n    rdfs:label \"endDate\" ;\n    rdfs:domain wd:Program, wd:Position, wd:Tenure, wd:Employment ;\n    rdfs:range xsd:date ;\n    schema:description \"The date on which the subject ended a program or position.\" .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T09:29:41.246571+00:00"
+  },
+  {
+    "id": "canon_000046",
+    "label": "percentage of marks",
+    "definition": "The proportion of total academic marks obtained by a person in an educational program, expressed as a percentage.",
+    "turtle": "wdt:percentageOfMarks a wikibase:Property ;\n    rdfs:label \"percentage of marks\" ;\n    schema:description \"The percentage of marks achieved by the subject in an academic program.\" ;\n    rdfs:domain wd:AcademicProgram, wd:Student, wd:Assessment ;\n    rdfs:range xsd:float .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T09:29:41.252963+00:00"
+  },
+  {
+    "id": "canon_000047",
+    "label": "current status",
+    "definition": "The current professional or project-related situation the individual is engaged in at the present time.",
+    "turtle": "wdt:CurrentStatus a wikibase:Property ;\n    rdfs:label \"current status\" ;\n    rdfs:comment \"The current employment or project status of the subject.\" ;\n    rdfs:domain wd:Person, wd:Organization, wd:Project ;\n    rdfs:range wd:EmploymentStatus, wd:ProjectStatus, wd:ActivityStatus .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T09:29:41.259376+00:00"
+  },
+  {
+    "id": "canon_000048",
+    "label": "multi-agent coordination framework",
+    "definition": "A collaborative system or architecture designed to enable coordination among multiple autonomous agents, typically developed or implemented by an individual in a technical or research capacity.",
+    "turtle": "wdt:MultiAgentCoordinationFramework a wikibase:Property ;\n    rdfs:label \"multiAgentCoordinationFramework\" ;\n    schema:description \"The name of a collaborative system or architecture being developed by the subject.\" ;\n    rdfs:domain wd:Person, wd:Organization, wd:ResearchProject ;\n    rdfs:range rdfs:Literal .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T09:29:41.266539+00:00"
+  },
+  {
+    "id": "canon_000049",
+    "label": "full name",
+    "definition": "The complete name of the individual associated with the resume document.",
+    "turtle": "wdt:fullName a wikibase:Property ;\n    rdfs:label \"fullName\" ;\n    rdfs:domain wd:Person ;\n    rdfs:range xsd:string ;\n    schema:description \"The full name of the individual.\" .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T10:42:06.679967+00:00"
+  },
+  {
+    "id": "canon_000050",
+    "label": "courses taken",
+    "definition": "A relation indicating the academic courses successfully completed by an individual as part of their educational training.",
+    "turtle": "wdt:coursesTaken a wikibase:Property ;\n    schema:description \"The list of courses completed in an academic program.\" ;\n    rdfs:label \"courses taken\" ;\n    rdfs:domain wd:AcademicProgram, wd:Student, wd:EducationRecord ;\n    rdfs:range wd:Course, wd:CompletedCourse, wd:AcademicSubject .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T10:42:06.687125+00:00"
+  },
+  {
+    "id": "canon_000051",
+    "label": "current status of role",
+    "definition": "A relation indicating whether a professional role is currently active or has been concluded, typically applied to employment or position entities.",
+    "turtle": "wdt:CurrentStatusOfRole a wikibase:Property ;\n    schema:description \"Whether a role is ongoing or completed.\" ;\n    rdfs:label \"current status of role\" ;\n    rdfs:domain wd:Role ;\n    rdfs:range wd:Status .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T10:42:06.693739+00:00"
+  },
+  {
+    "id": "canon_000052",
+    "label": "name of FSc program",
+    "definition": "The name of the intermediate (FSc) program completed by an individual, indicating their secondary-level academic specialization.",
+    "turtle": "wdt:nameOfFScProgram a wikibase:Property ;\n    schema:description \"The name of the intermediate (FSc) program\" ;\n    rdfs:label \"name of FSc program\" ;\n    rdfs:domain wd:EducationProgram ;\n    rdfs:range xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.677110+00:00"
+  },
+  {
+    "id": "canon_000053",
+    "label": "marks achieved in FSc",
+    "definition": "The numerical score or grade attained by a person in the FSc (Intermediate) academic program.",
+    "turtle": "wdt:marksAchievedInFSc a wikibase:Property ;\n    rdfs:label \"marks achieved in FSc\" ;\n    rdfs:comment \"The marks obtained in the FSc program.\" ;\n    rdfs:domain wd:student ;\n    rdfs:range xsd:integer .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.684190+00:00"
+  },
+  {
+    "id": "canon_000054",
+    "label": "name of matriculation program",
+    "definition": "The specific title or designation of the academic matriculation program successfully completed by the individual.",
+    "turtle": "wdt:nameOfMatriculationProgram a wikibase:Property ;\n    schema:description \"The name of the matriculation program completed.\" ;\n    rdfs:label \"name of matriculation program\" ;\n    rdfs:domain wd:Person, wd:Education ;\n    rdfs:range rdfs:Literal .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.690914+00:00"
+  },
+  {
+    "id": "canon_000055",
+    "label": "marks achieved in matriculation",
+    "definition": "The academic scores attained by a person during their matriculation-level education.",
+    "turtle": "wdt:marksAchievedInMatriculation a wikibase:Property ;\n    schema:description \"The marks obtained in the matriculation program.\" ;\n    rdfs:label \"marks achieved in matriculation\" ;\n    rdfs:domain wd:Person, wd:Student ;\n    rdfs:range xsd:float, xsd:integer, xsd:string .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.697717+00:00"
+  },
+  {
+    "id": "canon_000056",
+    "label": "simulation engineered",
+    "definition": "A simulation engineered by a person refers to a computational model or system designed and implemented by an individual to replicate real or hypothetical processes.",
+    "turtle": "wdt:simulationEngineered a wikibase:Property ;\n    rdfs:label \"simulationEngineered\" ;\n    rdfs:domain wd:individual ;\n    rdfs:range wd:simulation ;\n    schema:description \"The specific simulation developed by the individual.\" .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.704275+00:00"
+  },
+  {
+    "id": "canon_000057",
+    "label": "algorithms implemented",
+    "definition": "The set of computational algorithms that a person has developed, applied, or integrated into a project or system.",
+    "turtle": "wdt:AlgorithmsImplemented a wikibase:Property ;\n    rdfs:label \"algorithms implemented\" ;\n    rdfs:comment \"The specific algorithms used in the simulation or project.\" ;\n    rdfs:domain wd:Simulation, wd:Project, wd:SoftwareImplementation ;\n    rdfs:range wd:Algorithm, wd:ComputationalMethod, wd:MachineLearningModel .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.711105+00:00"
+  },
+  {
+    "id": "canon_000058",
+    "label": "status of project",
+    "definition": "The current developmental stage or progress level of a project or framework.",
+    "turtle": "wdt:StatusOfProject a wikibase:Property ;\n    rdfs:label \"StatusOfProject\" ;\n    rdfs:domain wd:project, wd:framework_development ;\n    rdfs:range wd:project_status, wd:development_stage ;\n    schema:description \"The current state or progress of the project or framework being developed.\" .",
+    "source_doc": "yourfile",
+    "added_at": "2026-07-01T11:04:23.717982+00:00"
+  }
+]

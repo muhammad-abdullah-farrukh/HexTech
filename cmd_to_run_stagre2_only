@@ -1,0 +1,8 @@
+cd /home/faryal/Documents/HexTech-main
+source .venv/bin/activate
+cd ocr-resume-paser
+set -a && . ./.env && set +a
+cd ..
+
+python ontogen/pipeline.py 62103ed0-dbba-42f0-90ad-4c80c07a89bf -r
+python ontogen/graphdb/load_to_neo4j.py

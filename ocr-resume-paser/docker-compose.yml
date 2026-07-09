@@ -1,0 +1,16 @@
+services:
+  postgres:
+    # pgvector-enabled Postgres 17 (stock postgres:17 lacks the `vector`
+    # extension the Ontogen schema's HNSW indexes need — see 0003 migration).
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: resume_parser
+      POSTGRES_USER: resume_parser
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+    ports:
+      # Host 5433 -> container 5432 to avoid colliding with a Postgres already on 5432.
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
